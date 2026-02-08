@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://nlu01rugcuxi"]
+
+[sub_resource type="Gradient" id="Gradient_681ml"]
+offsets = PackedFloat32Array(0, 0.7419786)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jen2r"]
+gradient = SubResource("Gradient_681ml")
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_dkjut"]
+offsets = PackedFloat32Array(0, 0.838558)
+colors = PackedColorArray(1, 0, 0, 1, 0.91764706, 0.8627451, 0.18431373, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rf25u"]
+gradient = SubResource("Gradient_dkjut")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_44a6l"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 50.1
+spread = 180.0
+initial_velocity_min = 150.0
+initial_velocity_max = 300.0
+gravity = Vector3(0, 0, 0)
+damping_min = 11.681001
+damping_max = 19.560001
+color = Color(3.8450508, 3.8450508, 3.8450508, 1)
+color_ramp = SubResource("GradientTexture1D_rf25u")
+
+[node name="PlayerExplosion" type="GPUParticles2D" unique_id=1846940180]
+emitting = false
+amount = 100
+texture = SubResource("GradientTexture2D_jen2r")
+lifetime = 5.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_44a6l")

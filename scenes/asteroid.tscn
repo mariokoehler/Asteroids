@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://7ygmy5j4e3kq"]
+[gd_scene format=3 uid="uid://7ygmy5j4e3kq"]
 
 [ext_resource type="Script" uid="uid://b7kc22x08evsh" path="res://scripts/asteroid.gd" id="1_6mo6b"]
 [ext_resource type="PackedScene" uid="uid://cjs60p10fs2a5" path="res://scenes/asteroid_variation_1.tscn" id="2_pnq5b"]
@@ -9,10 +9,10 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6mo6b"]
 
-[node name="Asteroid" type="RigidBody2D" groups=["asteroids"]]
+[node name="Asteroid" type="RigidBody2D" unique_id=576744399 groups=["asteroids"]]
 collision_layer = 4
 collision_mask = 3
-mass = 3.0
+mass = 1000.0
 physics_material_override = SubResource("PhysicsMaterial_6mo6b")
 gravity_scale = 0.0
 max_contacts_reported = 1

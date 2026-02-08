@@ -1,17 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://vcpj0eed7j0t"]
+[gd_scene format=3 uid="uid://vcpj0eed7j0t"]
 
 [ext_resource type="Script" uid="uid://bpa4x56q66shf" path="res://scripts/game_over_screen.gd" id="1_61w2s"]
 [ext_resource type="FontFile" uid="uid://b6pgu5ddbl5ie" path="res://fonts/space age.ttf" id="2_jw6e5"]
+[ext_resource type="AudioStream" uid="uid://c1d3e0xvnvl51" path="res://sounds/fail.mp3" id="3_jw6e5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_wa2qn"]
 font = ExtResource("2_jw6e5")
 font_size = 64
 
-[node name="GameOverScreen" type="CanvasLayer"]
+[node name="GameOverScreen" type="CanvasLayer" unique_id=1526548925]
 process_mode = 3
 script = ExtResource("1_61w2s")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=366062801]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -20,30 +21,34 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.78431374)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1694404510]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=99020123]
 layout_mode = 2
 
-[node name="Title Label" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Title Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=2145793382]
 layout_mode = 2
 text = "GAME OVER"
 label_settings = SubResource("LabelSettings_wa2qn")
 horizontal_alignment = 1
 
-[node name="ScoreLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="ScoreLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1885351051]
 unique_name_in_owner = true
 layout_mode = 2
 text = "FINAL SCORE: 000000"
 label_settings = SubResource("LabelSettings_wa2qn")
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1259543426]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RESTART GAME"
+
+[node name="FailSound" type="AudioStreamPlayer" parent="." unique_id=844452211]
+stream = ExtResource("3_jw6e5")
+autoplay = true

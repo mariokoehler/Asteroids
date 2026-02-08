@@ -4,13 +4,13 @@ class_name Bullet extends WrappableBody
 @export var lifetime: float = 2.0
 @export var damage: int = 1 # Standard bullet does 1 damage
 
+@onready var laser_sound: AudioStreamPlayer = $LaserSound
+
 func _ready() -> void:
 	# 1. Initialize wrapping
 	super._ready()
-	
-	# 2. Set velocity relative to its own rotation
-	# (The rotation will be set by the player when spawning)
-	#linear_velocity = Vector2.RIGHT.rotated(rotation) * speed
+
+	laser_sound.play()
 	
 	# 3. Set a timer to destroy the object
 	# This creates a lightweight timer that runs in the background

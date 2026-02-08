@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://2ucm0u4cor5j"]
+[gd_scene format=3 uid="uid://2ucm0u4cor5j"]
 
 [ext_resource type="Script" uid="uid://d1cych6a3anq6" path="res://scripts/world.gd" id="1_k0juu"]
 [ext_resource type="PackedScene" uid="uid://c1owlh285f82h" path="res://scenes/player.tscn" id="1_nnsk1"]
@@ -29,18 +29,22 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="World" type="Node2D"]
+[sub_resource type="Environment" id="Environment_qfnet"]
+glow_enabled = true
+glow_bloom = 0.19
+
+[node name="World" type="Node2D" unique_id=2134616299]
 script = ExtResource("1_k0juu")
 asteroid_scene = ExtResource("2_rwgxs")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1291187046]
 anchor_mode = 0
 zoom = Vector2(0.5, 0.5)
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=956172206]
 script = ExtResource("5_71j4m")
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+[node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=680856142]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 43.0
@@ -49,41 +53,41 @@ theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/MarginContainer" unique_id=1842404727]
 layout_mode = 2
 
-[node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer"]
+[node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=2038453315]
 unique_name_in_owner = true
 layout_mode = 2
 label_settings = SubResource("LabelSettings_qfnet")
 
-[node name="Control" type="Control" parent="HUD/MarginContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=1343126419]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LivesLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer"]
+[node name="LivesLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=412149426]
 unique_name_in_owner = true
 layout_mode = 2
 label_settings = SubResource("LabelSettings_i7141")
 
-[node name="CenterContainer" type="CenterContainer" parent="HUD/MarginContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="HUD/MarginContainer" unique_id=1623219245]
 layout_mode = 2
 
-[node name="HealthBar" type="ProgressBar" parent="HUD/MarginContainer/CenterContainer"]
+[node name="HealthBar" type="ProgressBar" parent="HUD/MarginContainer/CenterContainer" unique_id=1632321777]
 custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_qfnet")
 theme_override_styles/fill = SubResource("StyleBoxFlat_i7141")
 show_percentage = false
 
-[node name="Player" parent="." instance=ExtResource("1_nnsk1")]
+[node name="Player" parent="." unique_id=1121675987 instance=ExtResource("1_nnsk1")]
 position = Vector2(1929, 1084)
 scale = Vector2(0.5, 0.5)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1628262516]
 layer = -100
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1376150866]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -91,3 +95,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_4wyf3")
 stretch_mode = 6
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1411499200]
+environment = SubResource("Environment_qfnet")

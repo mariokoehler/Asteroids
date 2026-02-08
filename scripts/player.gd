@@ -7,10 +7,27 @@ extends WrappableBody
 @onready var muzzle: Marker2D = $Muzzle
 @export var max_health: int = 5
 
+@export var explosion_scene: PackedScene
+
 @onready var left_exhaust = $LeftEngine
 @onready var right_exhaust = $RightEngine
 
+@onready var explosion_sound: AudioStreamPlayer = $ExplosionSound
+@onready var thump_sound: AudioStreamPlayer = $ThumpSound
+@onready var sprite: Sprite2D = $Ship
+@onready var collider: CollisionPolygon2D = $CollisionPolygon2D
+@onready var exhaustLeft: GPUParticles2D = $LeftEngine
+@onready var exhaustRight: GPUParticles2D = $RightEngine
+
+@onready var engine_sound: AudioStreamPlayer = $EngineSound
+
 var current_health: int
+
+# Audio Settings
+const VOLUME_OFF: float = -80.0
+const VOLUME_ON: float = -10.0 # -10 is usually a good balance against explosions
+const PITCH_IDLE: float = 0.8
+const PITCH_THRUST: float = 1.2
 
 # This variable tracks how many seconds we have to wait.
 # We initialize it to 0.0 so we can shoot immediately when the game starts.
@@ -35,9 +52,16 @@ func _physics_process(_delta: float) -> void:
 		apply_central_force(force_vector)
 		left_exhaust.emitting = true
 		right_exhaust.emitting = true
+		# Smoothly ramp UP volume and pitch
+		# move_toward moves a value to a target by a fixed amount per frame
+		engine_sound.volume_db = move_toward(engine_sound.volume_db, VOLUME_ON, _delta * 240.0)
+		engine_sound.pitch_scale = move_toward(engine_sound.pitch_scale, PITCH_THRUST, _delta * 2.0)
 	else:
 		left_exhaust.emitting = false
 		right_exhaust.emitting = false
+		# Smoothly ramp DOWN volume and pitch
+		engine_sound.volume_db = move_toward(engine_sound.volume_db, VOLUME_OFF, _delta * 80.0)
+		engine_sound.pitch_scale = move_toward(engine_sound.pitch_scale, PITCH_IDLE, _delta * 2.0)
 	
 	if Input.is_action_pressed("left"):
 		apply_torque(-rotation_speed)
@@ -102,6 +126,8 @@ func take_damage(amount: int) -> void:
 	# Visual feedback
 	flash_damage()
 	
+	thump_sound.play();
+	
 	if current_health <= 0:
 		die()
 		return
@@ -121,23 +147,49 @@ func start_invincibility() -> void:
 	
 
 func flash_damage() -> void:
-	var sprite = get_node_or_null("Ship")
-	if sprite:
+	var shipSprite = get_node_or_null("Ship")
+	if shipSprite:
 		var tween = create_tween()
-		tween.tween_property(sprite, "modulate", Color.RED, 0.1)
-		tween.tween_property(sprite, "modulate", Color.WHITE, 0.1)
+		tween.tween_property(shipSprite, "modulate", Color.RED, 0.1)
+		tween.tween_property(shipSprite, "modulate", Color.WHITE, 0.1)
 
 
-func die() -> void:
-	print("Player Perished!")
+func die() -> void:	
+	if explosion_scene:
+		var explosion = explosion_scene.instantiate()
+		explosion.global_position = global_position
+		explosion.emitting = true
+		# We add it to the parent (The World) so it stays behind when we die
+		get_parent().call_deferred("add_child", explosion)
+		
+	# 1. Stop processing input and physics
+	# This prevents the player from moving or shooting while "dead"
+	set_physics_process(false)
+	set_process_input(false)
 	
-	# Call the Global function to handle the death logic
-	Global.player_died() 
+	# 2. Make the player "disappear"
+	# We don't destroy the node yet, just hide the visuals
+	sprite.visible = false
+	exhaustLeft.emitting = false
+	exhaustRight.emitting = false
 	
-	# CRITICAL: We need to destroy the player node itself,
-	# but we must wait one frame so the Global script can handle the reload.
-	# We use call_deferred to safely free the node after the frame has finished.
-	call_deferred("queue_free") 
+	# 3. Disable collision safely
+	# We use set_deferred because we might be in the middle of a physics collision
+	collider.set_deferred("disabled", true)
+	
+	# 4. Play the Sound
+	explosion_sound.play()
+	
+	# 5. Wait for the sound to finish
+	# The 'finished' signal is emitted by the AudioStreamPlayer when the clip ends
+	await explosion_sound.finished
+	
+	# 6. NOW we trigger the game logic
+	# This will decrement lives and reload the scene
+	Global.player_died()
+	
+	# 7. Finally, destroy this node
+	queue_free()
 
 
 # Signal connected from the Inspector

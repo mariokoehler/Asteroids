@@ -1,8 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://c1owlh285f82h"]
+[gd_scene format=3 uid="uid://c1owlh285f82h"]
 
 [ext_resource type="Script" uid="uid://v3yq7p3pck0u" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://hvqlcd4ryfxd" path="res://scenes/bullet.tscn" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://dmawev8vq6opy" path="res://assets/ship.png" id="2_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://nlu01rugcuxi" path="res://scenes/player_explosion.tscn" id="3_qlg0r"]
+[ext_resource type="AudioStream" uid="uid://suoelvfyxgi2" path="res://sounds/explosion.mp3" id="4_dqkch"]
+[ext_resource type="AudioStream" uid="uid://bwgnhtm4oc21y" path="res://sounds/thump.mp3" id="6_tuyoq"]
+[ext_resource type="AudioStream" uid="uid://ca8v2luh0taal" path="res://sounds/engine.mp3" id="7_fjrip"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dqkch"]
 
@@ -16,7 +20,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Gradient" id="Gradient_qlg0r"]
-colors = PackedColorArray(0.06826481, 0.77775383, 1.0946668, 1, 1.3159182, 0.13248317, 1.1445082, 0)
+colors = PackedColorArray(0.10953699, 1.0374465, 1.331864, 1, 1.3159182, 0.13248317, 1.1445082, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_tuyoq"]
 gradient = SubResource("Gradient_qlg0r")
@@ -42,9 +46,10 @@ linear_accel_min = -2.2351742e-06
 linear_accel_max = -2.2351742e-06
 scale_min = 0.0
 scale_curve = SubResource("CurveTexture_smehm")
+color = Color(2.201223, 2.201223, 2.201223, 1)
 color_ramp = SubResource("GradientTexture1D_tuyoq")
 
-[node name="Player" type="RigidBody2D"]
+[node name="Player" type="RigidBody2D" unique_id=809248263]
 collision_mask = 4
 mass = 0.5
 physics_material_override = SubResource("PhysicsMaterial_dqkch")
@@ -56,19 +61,20 @@ script = ExtResource("1_g2els")
 rotation_speed = 15000.0
 bullet_scene = ExtResource("2_dqkch")
 rate_of_fire = 4.0
+explosion_scene = ExtResource("3_qlg0r")
 
-[node name="Ship" type="Sprite2D" parent="."]
+[node name="Ship" type="Sprite2D" parent="." unique_id=95910175]
 rotation = 1.5707964
 texture = ExtResource("2_qhqgy")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=820891469]
 rotation = 1.5707964
 polygon = PackedVector2Array(45, 1, 125, 96, 122, 124, 50, 102, 38, 122, -38, 122, -47, 101, -122, 124, -125, 94, -41, -10, -31, -29, -5, -123, 5, -123, 30, -29)
 
-[node name="Muzzle" type="Marker2D" parent="."]
+[node name="Muzzle" type="Marker2D" parent="." unique_id=1633342890]
 position = Vector2(123, 0)
 
-[node name="LeftEngine" type="GPUParticles2D" parent="."]
+[node name="LeftEngine" type="GPUParticles2D" parent="." unique_id=1273721300]
 position = Vector2(-117, -33)
 amount = 50
 texture = SubResource("GradientTexture2D_dqkch")
@@ -76,12 +82,23 @@ lifetime = 0.5
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_ur7pv")
 
-[node name="RightEngine" type="GPUParticles2D" parent="."]
+[node name="RightEngine" type="GPUParticles2D" parent="." unique_id=508992780]
 position = Vector2(-118, 32)
 amount = 50
 texture = SubResource("GradientTexture2D_dqkch")
 lifetime = 0.5
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_ur7pv")
+
+[node name="ExplosionSound" type="AudioStreamPlayer" parent="." unique_id=1258644025]
+stream = ExtResource("4_dqkch")
+
+[node name="ThumpSound" type="AudioStreamPlayer" parent="." unique_id=1902025124]
+stream = ExtResource("6_tuyoq")
+
+[node name="EngineSound" type="AudioStreamPlayer" parent="." unique_id=595997064]
+stream = ExtResource("7_fjrip")
+volume_db = -80.0
+autoplay = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
