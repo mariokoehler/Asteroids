@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://c17gw6u26h4bj" path="res://scenes/asteroid_variation_3.tscn" id="4_0jovh"]
 [ext_resource type="PackedScene" uid="uid://b727vk5gfulp3" path="res://scenes/asteroid_variation_4.tscn" id="5_pwrvu"]
 [ext_resource type="PackedScene" uid="uid://bgjjn70g7v0ny" path="res://scenes/dust_explosion.tscn" id="6_0jovh"]
+[ext_resource type="AudioStream" uid="uid://djigg4wsg854u" path="res://sounds/rockBreakLarge.mp3" id="7_71tyo"]
+[ext_resource type="AudioStream" uid="uid://b6nu2wu23p0cs" path="res://sounds/rockBreakSmall.mp3" id="8_jm418"]
+[ext_resource type="AudioStream" uid="uid://ck0bf33f20aqa" path="res://sounds/rockHit.mp3" id="9_osw8w"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6mo6b"]
 
@@ -25,3 +28,9 @@ small_variations = Array[PackedScene]([ExtResource("5_pwrvu")])
 min_speed = 150.0
 max_speed = 300.0
 explosion_scene = ExtResource("6_0jovh")
+break_sound_large = ExtResource("7_71tyo")
+break_sound_small = ExtResource("8_jm418")
+
+[node name="RockHit" type="AudioStreamPlayer" parent="." unique_id=2088250575]
+stream = ExtResource("9_osw8w")
+max_polyphony = 4

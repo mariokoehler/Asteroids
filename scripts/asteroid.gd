@@ -21,8 +21,13 @@ enum Size { LARGE, MEDIUM, SMALL }
 
 # Using int for discrete hits (3 hits to kill)
 @export var max_health: int = 3 
-
 @export var explosion_scene: PackedScene
+
+@export_group("Sounds")
+@export var break_sound_large: AudioStream
+@export var break_sound_small: AudioStream
+
+@onready var rock_hit_sound: AudioStreamPlayer = $RockHit
 
 # A place to store the velocity before collisions mess it up
 var velocity_before_collision: Vector2 = Vector2.ZERO
@@ -32,6 +37,8 @@ var current_health: int
 
 # We need a place to store the reference to the spawned visual
 var active_visual: Node2D
+
+var last_hit_time: float = 0.0
 
 # Point this to your main asteroid scene file path
 const ASTEROID_SCENE_PATH: String = "res://scenes/asteroid.tscn" 
@@ -89,10 +96,19 @@ func _physics_process(delta: float) -> void:
 func take_damage(amount: int) -> void:
 	current_health -= amount
 	
-	# Visual Feedback
-	flash_damage()
-	
-	if current_health <= 0:
+	if current_health > 0:
+		flash_damage()
+		
+		# Get current time in milliseconds
+		var now = Time.get_ticks_msec()
+		
+		# Only play sound if 50ms have passed since the last one
+		if now - last_hit_time > 50:
+			rock_hit_sound.pitch_scale = randf_range(0.8, 1.2)
+			rock_hit_sound.play()
+			last_hit_time = now
+			
+	elif current_health <= 0:
 		explode()
 
 
@@ -113,21 +129,33 @@ func explode() -> void:
 		var explosion = explosion_scene.instantiate()
 		explosion.global_position = global_position
 		
+		var sound_to_play: AudioStream
+		
 		# Scale the explosion based on asteroid size?
 		# A simple way:
 		match size:
-			Size.LARGE: explosion.scale = Vector2(1.5, 1.5)
-			Size.MEDIUM: explosion.scale = Vector2(1.0, 1.0)
-			Size.SMALL: explosion.scale = Vector2(0.6, 0.6)
-			
+			Size.LARGE: 
+				explosion.scale = Vector2(1.5, 1.5)
+				sound_to_play = break_sound_large
+			Size.MEDIUM: 
+				explosion.scale = Vector2(1.0, 1.0)
+				sound_to_play = break_sound_small
+			Size.SMALL:
+				explosion.scale = Vector2(0.6, 0.6)
+				sound_to_play = break_sound_small
+
+		# Pass the sound to the explosion wrapper
+		if explosion.has_method("set_sound"):
+			explosion.set_sound(sound_to_play)
+
 		# Add to World (the parent), NOT self!
 		get_parent().call_deferred("add_child", explosion)
-		
+
 	# 2. Split Logic
 	# If we are NOT a small asteroid, we spawn children
 	if size != Size.SMALL:
 		spawn_children()
-		
+
 	# 3. Destroy self
 	queue_free()
 

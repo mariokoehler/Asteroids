@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bgjjn70g7v0ny"]
 
 [ext_resource type="Script" uid="uid://6gq5tnbypll3" path="res://dust_explosion.gd" id="1_xrrcd"]
+[ext_resource type="AudioStream" uid="uid://djigg4wsg854u" path="res://sounds/rockBreakLarge.mp3" id="2_hfat4"]
 
 [sub_resource type="Gradient" id="Gradient_hfat4"]
 offsets = PackedFloat32Array(0, 0.6)
@@ -39,3 +40,6 @@ one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_b4y0f")
 script = ExtResource("1_xrrcd")
+
+[node name="SoundPlayer" type="AudioStreamPlayer2D" parent="." unique_id=875469689]
+stream = ExtResource("2_hfat4")
