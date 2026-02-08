@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://bgjjn70g7v0ny"]
+
+[ext_resource type="Script" uid="uid://6gq5tnbypll3" path="res://dust_explosion.gd" id="1_xrrcd"]
+
+[sub_resource type="Gradient" id="Gradient_hfat4"]
+offsets = PackedFloat32Array(0, 0.6)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kbu3n"]
+gradient = SubResource("Gradient_hfat4")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_knu7n"]
+colors = PackedColorArray(0.57, 0.510435, 0.4617, 1, 0.74407256, 0.44536197, 0.2846519, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xw3wq"]
+gradient = SubResource("Gradient_knu7n")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b4y0f"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 15.0
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
+damping_min = 20.0
+damping_max = 20.0
+color_ramp = SubResource("GradientTexture1D_xw3wq")
+
+[node name="DustExplosion" type="GPUParticles2D"]
+emitting = false
+amount = 30
+texture = SubResource("GradientTexture2D_kbu3n")
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_b4y0f")
+script = ExtResource("1_xrrcd")

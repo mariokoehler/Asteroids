@@ -1,0 +1,87 @@
+[gd_scene load_steps=12 format=3 uid="uid://c1owlh285f82h"]
+
+[ext_resource type="Script" uid="uid://v3yq7p3pck0u" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://hvqlcd4ryfxd" path="res://scenes/bullet.tscn" id="2_dqkch"]
+[ext_resource type="Texture2D" uid="uid://dmawev8vq6opy" path="res://assets/ship.png" id="2_qhqgy"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dqkch"]
+
+[sub_resource type="Gradient" id="Gradient_qhqgy"]
+offsets = PackedFloat32Array(0, 0.42954546)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dqkch"]
+gradient = SubResource("Gradient_qhqgy")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_qlg0r"]
+colors = PackedColorArray(0.06826481, 0.77775383, 1.0946668, 1, 1.3159182, 0.13248317, 1.1445082, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tuyoq"]
+gradient = SubResource("Gradient_qlg0r")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_fjrip"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_smehm"]
+curve = SubResource("Curve_fjrip")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ur7pv"]
+particle_flag_disable_z = true
+angle_min = 1.0728835e-05
+angle_max = 1.0728835e-05
+direction = Vector3(-1, 0, 0)
+spread = 15.0
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.2351742e-06
+linear_accel_max = -2.2351742e-06
+scale_min = 0.0
+scale_curve = SubResource("CurveTexture_smehm")
+color_ramp = SubResource("GradientTexture1D_tuyoq")
+
+[node name="Player" type="RigidBody2D"]
+collision_mask = 4
+mass = 0.5
+physics_material_override = SubResource("PhysicsMaterial_dqkch")
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
+angular_damp = 2.0
+script = ExtResource("1_g2els")
+rotation_speed = 15000.0
+bullet_scene = ExtResource("2_dqkch")
+rate_of_fire = 4.0
+
+[node name="Ship" type="Sprite2D" parent="."]
+rotation = 1.5707964
+texture = ExtResource("2_qhqgy")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+rotation = 1.5707964
+polygon = PackedVector2Array(45, 1, 125, 96, 122, 124, 50, 102, 38, 122, -38, 122, -47, 101, -122, 124, -125, 94, -41, -10, -31, -29, -5, -123, 5, -123, 30, -29)
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(123, 0)
+
+[node name="LeftEngine" type="GPUParticles2D" parent="."]
+position = Vector2(-117, -33)
+amount = 50
+texture = SubResource("GradientTexture2D_dqkch")
+lifetime = 0.5
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ur7pv")
+
+[node name="RightEngine" type="GPUParticles2D" parent="."]
+position = Vector2(-118, 32)
+amount = 50
+texture = SubResource("GradientTexture2D_dqkch")
+lifetime = 0.5
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ur7pv")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

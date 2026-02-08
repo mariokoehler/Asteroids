@@ -1,0 +1,27 @@
+[gd_scene load_steps=8 format=3 uid="uid://7ygmy5j4e3kq"]
+
+[ext_resource type="Script" uid="uid://b7kc22x08evsh" path="res://scripts/asteroid.gd" id="1_6mo6b"]
+[ext_resource type="PackedScene" uid="uid://cjs60p10fs2a5" path="res://scenes/asteroid_variation_1.tscn" id="2_pnq5b"]
+[ext_resource type="PackedScene" uid="uid://bvst5dhit3dtg" path="res://scenes/asteroid_variation_2.tscn" id="3_pwrvu"]
+[ext_resource type="PackedScene" uid="uid://c17gw6u26h4bj" path="res://scenes/asteroid_variation_3.tscn" id="4_0jovh"]
+[ext_resource type="PackedScene" uid="uid://b727vk5gfulp3" path="res://scenes/asteroid_variation_4.tscn" id="5_pwrvu"]
+[ext_resource type="PackedScene" uid="uid://bgjjn70g7v0ny" path="res://scenes/dust_explosion.tscn" id="6_0jovh"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6mo6b"]
+
+[node name="Asteroid" type="RigidBody2D" groups=["asteroids"]]
+collision_layer = 4
+collision_mask = 3
+mass = 3.0
+physics_material_override = SubResource("PhysicsMaterial_6mo6b")
+gravity_scale = 0.0
+max_contacts_reported = 1
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("1_6mo6b")
+large_variations = Array[PackedScene]([ExtResource("2_pnq5b")])
+medium_variations = Array[PackedScene]([ExtResource("3_pwrvu"), ExtResource("4_0jovh")])
+small_variations = Array[PackedScene]([ExtResource("5_pwrvu")])
+min_speed = 150.0
+max_speed = 300.0
+explosion_scene = ExtResource("6_0jovh")

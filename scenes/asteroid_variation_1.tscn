@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjs60p10fs2a5"]
+
+[ext_resource type="Texture2D" uid="uid://biga0d0u831vy" path="res://assets/asteroid.png" id="1_x2yl1"]
+
+[node name="Asteroid Variation 1" type="CollisionPolygon2D"]
+polygon = PackedVector2Array(114, -58, 142, -53, 147, -6, 169, 25, 168, 75, 138, 129, 86, 151, 52, 191, 19, 213, -2, 203, -19, 207, -54, 183, -83, 173, -101, 177, -127, 163, -144, 122, -163, 97, -173, 50, -173, 16, -155, -4, -156, -35, -123, -89, -87, -119, -62, -159, -56, -178, -30, -186, -3, -216, 33, -208, 66, -175, 76, -164, 94, -110)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_x2yl1")
