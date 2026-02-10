@@ -1,27 +1,30 @@
 extends WrappableBody
 
+@export_category("Physics")
 @export var thrust_power: float = 500.0
 @export var rotation_speed: float = 2000.0
-@export var bullet_scene: PackedScene
-@export var rate_of_fire: float = 8.0
-@onready var muzzle: Marker2D = $Muzzle
-@export var max_health: int = 5
 
+@export_category("Referenced Scenes")
+@export var bullet_scene: PackedScene
 @export var explosion_scene: PackedScene
 
+@export_category("Attributes")
+@export var rate_of_fire: float = 8.0
+@export var max_health: int = 5
+
+
+@onready var muzzle: Marker2D = $Muzzle
 @onready var left_exhaust = $LeftEngine
 @onready var right_exhaust = $RightEngine
-
-@onready var explosion_sound: AudioStreamPlayer = $ExplosionSound
-@onready var thump_sound: AudioStreamPlayer = $ThumpSound
 @onready var sprite: Sprite2D = $Ship
 @onready var collider: CollisionPolygon2D = $CollisionPolygon2D
+
 @onready var exhaustLeft: GPUParticles2D = $LeftEngine
 @onready var exhaustRight: GPUParticles2D = $RightEngine
 
 @onready var engine_sound: AudioStreamPlayer = $EngineSound
-
-var current_health: int
+@onready var explosion_sound: AudioStreamPlayer = $ExplosionSound
+@onready var thump_sound: AudioStreamPlayer = $ThumpSound
 
 # Audio Settings
 const VOLUME_OFF: float = -80.0
@@ -34,6 +37,8 @@ const PITCH_THRUST: float = 1.2
 var _cooldown_timer: float = 0.0
 
 var is_invincible: bool = false
+var current_health: int
+
 
 func _ready() -> void:
 	super._ready() # Initialize screen wrap
